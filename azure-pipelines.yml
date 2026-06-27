@@ -13,7 +13,15 @@ variables:
   projectPath: '$(Build.SourceDirectory)/core_mvc_product/core_mvc_product.csproj'
   buildConfiguration: 'Release'
 
+
+
 steps:
+
+- script: |
+    echo $(Build.SourcesDirectory)
+    dir $(Build.SourcesDirectory) /s
+  displayName: 'Show repository structure'
+
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
 
