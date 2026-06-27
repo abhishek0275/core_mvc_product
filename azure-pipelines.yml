@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: window-latest
+  vmImage: windows-latest
 
 variables:
   projectPath: '$(Build.SourceDirectory)/core_mvc_product/core_mvc_product.csproj'
