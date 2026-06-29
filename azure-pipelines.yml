@@ -27,14 +27,34 @@ steps:
 
 - task: DotNetCoreCLI@2
   inputs:
-    azureSubscription: 'Azure subscription 1(1a7d4539-2ab5-4f4f-b280-f4b4c576ad8b)'
+   
     command: 'build'
     projects: '$(projectPath)'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   inputs:
-    azureSubscription: 'Azure subscription 1(1a7d4539-2ab5-4f4f-b280-f4b4c576ad8b)'
+    
     command: 'publish'
     publishWebProjects: true
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+
+- task: FileTransform@2
+  inputs:
+    folderPath: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    enableJsonTransform: true
+    jsonTargetFiles: '**/appsetting.json'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'Azure subscription 1(1a7d4539-2ab5-4f4f-b280-f4b4c576ad8b)'
+    appType: 'webApp'
+    appName: 'webApp101'
+    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    deploymentMethod: 'auto'
